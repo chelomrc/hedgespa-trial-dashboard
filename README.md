@@ -17,10 +17,10 @@ Bloomberg-style mini dashboard built for the HedgeSPA trial using mock data.
 - Portfolio selector for two mock portfolios
 - Three widgets:
   - Summary (total value, daily P/L, mini performance chart)
-  - News (3 headlines per portfolio)
+  - News (3–5 headlines per portfolio per RFP; mock: 3 for portfolio 1, 5 for portfolio 2)
   - Allocation (stocks/bonds/cash pie chart)
 - Drag and resize widgets in dashboard mode
-- Tear-out windows per widget using `window.open`
+- Tear-out: **native `BrowserWindow`** when running in Electron (IPC `open-widget-window`); falls back to `window.open` in the browser
 - Layout and selected portfolio persistence in `localStorage`
 - User type profile switch (`front-office`, `back-office`) with separate saved layouts
 - Live mock updates every 5 seconds
@@ -63,16 +63,17 @@ npm run build
 
 - Portfolio selector (2 mock portfolios): **Compliant**
 - 3 working widgets (Summary, News, Allocation): **Compliant**
+- News headlines (3–5 per portfolio): **Compliant**
 - Drag and resize in browser: **Compliant**
 - Mock real-time updates every 5-10 seconds: **Compliant** (5s simulation)
-- Tear-out widget windows: **Compliant** (browser-based PoC)
+- Tear-out widget windows: **Compliant** (native windows in Electron; browser fallback)
 - Layout persistence (positions, sizes, selected portfolio): **Compliant**
 - Desktop/laptop usability: **Compliant**
 - User-specific persistence simulation: **Compliant** (front/back office profiles)
 
 ## Known Trial Limits
 
-- Tear-out is web-level (`window.open`) today; native `BrowserWindow` per widget is the natural Electron follow-up.
+- In plain browser, tear-out still uses `window.open`. In Electron, each widget opens as its own `BrowserWindow` (refocus if the same widget is already open).
 - Data source is mocked for trial scope (`clientMock.ts`).
 
 ## Mock data

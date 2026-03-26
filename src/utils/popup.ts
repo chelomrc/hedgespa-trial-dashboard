@@ -17,3 +17,23 @@ export function buildPopupUrl(context: PopupContext) {
 export function openPopupWindow(url: string, widgetId: string) {
   window.open(url, `${widgetId}-window`, 'width=720,height=460,left=100,top=100')
 }
+
+export type NativeWidgetPayload = {
+  widgetId: string
+  userType: string
+  selectedPortfolio: string
+}
+
+export function openTearOutWindow(context: PopupContext) {
+  const api = window.hedgespaDesktop?.openWidgetWindow
+  if (typeof api === 'function') {
+    void api({
+      widgetId: context.widgetId,
+      userType: context.userType,
+      selectedPortfolio: context.selectedPortfolio,
+    })
+    return
+  }
+  const url = buildPopupUrl(context)
+  openPopupWindow(url, context.widgetId)
+}

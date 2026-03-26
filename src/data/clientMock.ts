@@ -298,6 +298,30 @@ export const portfolioNews = [
     source: "Business Times",
     timestamp: "2026-03-18T08:30:00Z",
     sentiment: "neutral"
+  },
+  {
+    id: 6,
+    portfolioId: 2,
+    headline: "Asian investment-grade bond spreads tighten on carry demand",
+    source: "Financial Times",
+    timestamp: "2026-03-18T10:20:00Z",
+    sentiment: "positive"
+  },
+  {
+    id: 7,
+    portfolioId: 2,
+    headline: "MAS holds policy stance steady; SGD rates markets calm",
+    source: "Bloomberg",
+    timestamp: "2026-03-18T07:15:00Z",
+    sentiment: "neutral"
+  },
+  {
+    id: 8,
+    portfolioId: 2,
+    headline: "Regional insurers add to long-duration fixed income allocations",
+    source: "Nikkei Asia",
+    timestamp: "2026-03-18T06:40:00Z",
+    sentiment: "positive"
   }
 ];
 

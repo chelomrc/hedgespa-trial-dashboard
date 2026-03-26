@@ -1,3 +1,4 @@
+import { BASE_PORTFOLIOS } from './mockData'
 import type { Portfolio } from './types'
 
 function jitter(value: number, scale: number) {
@@ -16,23 +17,9 @@ function nextAllocation(portfolio: Portfolio) {
   return { stocks, bonds: normalizedBonds, cash }
 }
 
-function nextNews(portfolio: Portfolio, tickMs: number) {
-  const pool = portfolio.news
-  if (pool.length === 0) return portfolio.news
-  const index = Math.floor(tickMs / 5000) % pool.length
-  const selected = pool[index]!
-  const freshItem = {
-    id: `${portfolio.id}-live-${tickMs}`,
-    headline: selected.headline,
-    source: selected.source,
-    timestamp: new Date(tickMs).toISOString(),
-  }
-  return [freshItem, ...portfolio.news.slice(0, 4)]
-}
-
 export function simulatePortfolioTick(portfolios: Portfolio[]): Portfolio[] {
-  const tickMs = Date.now()
   return portfolios.map((portfolio) => {
+    const baseNews = BASE_PORTFOLIOS.find((p) => p.id === portfolio.id)?.news ?? portfolio.news
     const move = (Math.random() - 0.5) * 9000
     const percentMove = (move / portfolio.summary.totalValue) * 100
     const previousPoint =
@@ -50,7 +37,7 @@ export function simulatePortfolioTick(portfolios: Portfolio[]): Portfolio[] {
         performanceData: nextSeries,
       },
       allocation: nextAllocation(portfolio),
-      news: nextNews(portfolio, tickMs),
+      news: baseNews,
     }
   })
 }

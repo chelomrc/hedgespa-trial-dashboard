@@ -7,7 +7,7 @@ import { BASE_PORTFOLIOS } from './mockData'
 import { fetchMockPortfolios } from './mockFeed'
 import { subscribeStorageSync, useDashboardStore } from './store/dashboardStore'
 import type { LayoutItem, UserType } from './types'
-import { buildPopupUrl, openPopupWindow } from './utils/popup'
+import { openTearOutWindow } from './utils/popup'
 import { readPopupParams } from './utils/queryParams'
 import { SelectMenu } from './components/SelectMenu'
 import { AllocationWidget } from './widgets/AllocationWidget'
@@ -80,8 +80,7 @@ function App() {
   }, [isPopup, popupPortfolio, popupUserType, setSelectedPortfolio, setUserType])
 
   function openTearOut(widgetId: string) {
-    const url = buildPopupUrl({ widgetId, userType, selectedPortfolio })
-    openPopupWindow(url, widgetId)
+    openTearOutWindow({ widgetId, userType, selectedPortfolio })
   }
 
   const isCompact = viewportWidth < 1100

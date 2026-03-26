@@ -32,6 +32,28 @@ body {
 
 #root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tear-out window: root must stretch so flex children get height; Recharts needs non-zero box */
+.widget.widget--tearout {
+  flex: 1;
+  height: auto;
+  min-height: 100vh;
+}
+
+.widget.widget--tearout .widget-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.widget.widget--tearout .allocation-chart {
+  flex: 0 0 auto;
+  height: 240px;
+  min-height: 240px;
 }
 
 .dashboard {

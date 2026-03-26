@@ -10,7 +10,7 @@ type Props = {
 
 export function WidgetShell({ title, widgetId, isPopup, onTearOut, children }: Props) {
   return (
-    <section className="widget">
+    <section className={isPopup ? 'widget widget--tearout' : 'widget'}>
       {!isPopup && (
         <header className="widget-header">
           <h3>{title}</h3>
