@@ -6,11 +6,23 @@ Bloomberg-style mini dashboard built for the HedgeSPA trial using mock data.
 
 - React 18 + TypeScript
 - Vite
+- Tailwind CSS v4 (with shared component classes via `@layer components`)
 - Zustand (global state for user type, selected portfolio, and layout persistence)
 - TanStack Query (mock data fetching + polling updates every 5s)
 - Electron (desktop shell loading the Vite renderer; compile-ready for packaging)
 - React Grid Layout (drag/resize widgets)
 - Recharts (summary and allocation charts)
+
+## UI Engineering Conventions
+
+- **Design tokens first:** store reusable UI values in `src/index.css` under `:root` (`--ui-*` variables).
+- **Reusable variants:** define semantic component classes inside `@layer components` (example: `ui-btn`, `widget-shell`, `summary-*`, `news-*`).
+- **Conditional classes:** use `cn()` from `src/lib/utils.ts` for all conditional/merge-heavy class composition.
+  - `cn()` combines `clsx` + `tailwind-merge`, so it removes conflicting Tailwind utilities safely (example: `p-2` + `p-4` resolves predictably).
+  - This keeps JSX readable, reduces styling regressions in state-heavy components, and makes `className` extension safer across reusable widgets.
+- **No hardcoded color drift:** avoid one-off hex values in TSX unless strictly chart-driven and tokenized.
+- **Consistent naming:** use feature-scoped class prefixes (`select-*`, `widget-*`, `summary-*`, `news-*`) instead of random utility clusters.
+- **Extensibility by default:** widget components should accept optional `className` when they may be composed in different containers.
 
 ## Features Implemented
 

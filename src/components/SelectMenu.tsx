@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { cn } from '../lib/utils'
 
 type Option = {
   value: string
@@ -96,19 +97,22 @@ export function SelectMenu({ label, value, options, onChange }: Props) {
   }
 
   return (
-    <div className="select-menu" ref={rootRef}>
+    <div className="select-root" ref={rootRef}>
       <span className="select-label">{label}</span>
       <div className="select-control">
         <button
           type="button"
-          className={`select-trigger ${open ? 'open' : ''}`}
+          className="ui-btn select-trigger"
           onClick={() => setOpen((prev) => !prev)}
           onKeyDown={onTriggerKeyDown}
           aria-haspopup="listbox"
           aria-expanded={open}
         >
           <span className="select-trigger-text">{selectedLabel}</span>
-          <span className="select-chevron" aria-hidden="true" />
+          <span
+            className={cn('select-chevron', open ? 'rotate-[225deg]' : 'rotate-45')}
+            aria-hidden="true"
+          />
         </button>
         {open && (
           <div className="select-options" role="listbox" aria-label={label}>
@@ -119,9 +123,11 @@ export function SelectMenu({ label, value, options, onChange }: Props) {
                 ref={(element) => {
                   optionRefs.current[index] = element
                 }}
-                className={`select-option ${option.value === value ? 'active' : ''} ${
-                  index === highlightedIndex ? 'highlighted' : ''
-                }`}
+                className={cn(
+                  'select-option',
+                  option.value === value && 'select-option-active',
+                  index === highlightedIndex && 'select-option-highlighted',
+                )}
                 onMouseEnter={() => setHighlightedIndex(index)}
                 onClick={() => {
                   selectOptionAt(index)

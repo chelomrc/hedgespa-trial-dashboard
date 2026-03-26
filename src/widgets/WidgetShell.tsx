@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { cn } from '../lib/utils'
 
 type Props = {
   title: string
@@ -10,14 +11,16 @@ type Props = {
 
 export function WidgetShell({ title, widgetId, isPopup, onTearOut, children }: Props) {
   return (
-    <section className={isPopup ? 'widget widget--tearout' : 'widget'}>
+    <section className={cn('widget-shell', isPopup && 'widget-shell-popup')}>
       {!isPopup && (
         <header className="widget-header">
-          <h3>{title}</h3>
-          <button onClick={() => onTearOut(widgetId)}>Tear out</button>
+          <h3 className="widget-title">{title}</h3>
+          <button className="ui-btn" onClick={() => onTearOut(widgetId)}>
+            Tear out
+          </button>
         </header>
       )}
-      {isPopup && <h3 className="popup-title">{title}</h3>}
+      {isPopup && <h3 className="widget-popup-title">{title}</h3>}
       <div className="widget-body">{children}</div>
     </section>
   )

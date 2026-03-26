@@ -102,7 +102,7 @@ function App() {
       isPopup={isPopup}
       onTearOut={openTearOut}
     >
-      <AllocationWidget portfolio={current} />
+      <AllocationWidget portfolio={current} isPopup={isPopup} />
     </WidgetShell>
   )
 
@@ -119,11 +119,11 @@ function App() {
   }
 
   return (
-    <main className="dashboard">
-      <header className="topbar">
-        <div>
-          <h1>HedgeSPA Trial Dashboard</h1>
-          <p>Bloomberg-style mock portfolio experience</p>
+    <main className="app-shell">
+      <header className="topbar-panel">
+        <div className="min-w-56">
+          <h1 className="topbar-title">HedgeSPA Trial Dashboard</h1>
+          <p className="topbar-subtitle">Bloomberg-style mock portfolio experience</p>
         </div>
         <SelectMenu
           label="User Type:"
@@ -143,13 +143,13 @@ function App() {
             label: portfolio.name,
           }))}
         />
-        <button className="topbar-button" onClick={resetLayoutForCurrentUser}>
+        <button className="ui-btn" onClick={resetLayoutForCurrentUser}>
           Reset layout
         </button>
       </header>
 
       <GridLayout
-        className="layout"
+        className="[&>div]:overflow-hidden"
         layout={layoutForRender}
         cols={isCompact ? 1 : 12}
         rowHeight={GRID_ROW_HEIGHT}

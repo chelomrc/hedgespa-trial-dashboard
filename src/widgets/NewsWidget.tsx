@@ -9,8 +9,8 @@ export function NewsWidget({ portfolio }: Props) {
     <ul className="news-list">
       {portfolio.news.map((news) => (
         <li key={news.id} className="news-item">
-          <p>{news.headline}</p>
-          <small>
+          <p className="news-title">{news.headline}</p>
+          <small className="news-meta">
             {news.source} - {new Date(news.timestamp).toLocaleTimeString()}
           </small>
         </li>
