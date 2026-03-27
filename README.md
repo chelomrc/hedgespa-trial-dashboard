@@ -80,6 +80,8 @@ npm run test:run
 
 Unit tests use [Vitest](https://vitest.dev/) and Testing Library (`npm test` for watch mode).
 
+**CI:** on push or pull request to `master`, GitHub Actions runs `npm ci`, `lint`, `test:run`, and `build` (see `.github/workflows/ci.yml`).
+
 ## Trial Compliance Matrix (RFP Core)
 
 - Portfolio selector (2 mock portfolios): **Compliant**
