@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import GridLayout from 'react-grid-layout/legacy'
 import 'react-grid-layout/css/styles.css'
@@ -16,6 +16,12 @@ import { SummaryWidget } from './widgets/SummaryWidget'
 import { WidgetShell } from './widgets/WidgetShell'
 
 const GRID_ROW_HEIGHT = 32
+
+const WIDGET_TITLE: Record<string, string> = {
+  summary: 'Summary',
+  allocation: 'Allocation',
+  news: 'News',
+}
 
 function App() {
   const popupParams = readPopupParams()
@@ -79,8 +85,28 @@ function App() {
     if (popupPortfolio) setSelectedPortfolio(popupPortfolio)
   }, [isPopup, popupPortfolio, popupUserType, setSelectedPortfolio, setUserType])
 
+  useLayoutEffect(() => {
+    if (!isPopup) return
+    const widgetKey = typeof popupWidget === 'string' ? popupWidget : ''
+    const widgetLabel = WIDGET_TITLE[widgetKey] ?? widgetKey
+    const portfolioLabel =
+      (popupPortfolio && BASE_PORTFOLIOS.find((p) => p.id === popupPortfolio)?.name) || current?.name || selectedPortfolio
+    document.title = `Portfolio: ${portfolioLabel} - ${widgetLabel}`
+  }, [isPopup, popupWidget, popupPortfolio, current?.name, selectedPortfolio])
+
+  useEffect(() => {
+    const api = window.hedgespaDesktop?.updateWidgetTitles
+    if (typeof api !== 'function') return
+    api({ portfolioName: current?.name ?? selectedPortfolio })
+  }, [current?.name, selectedPortfolio])
+
   function openTearOut(widgetId: string) {
-    openTearOutWindow({ widgetId, userType, selectedPortfolio })
+    openTearOutWindow({
+      widgetId,
+      userType,
+      selectedPortfolio,
+      portfolioName: current?.name ?? selectedPortfolio,
+    })
   }
 
   const isCompact = viewportWidth < 1100

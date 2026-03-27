@@ -44,6 +44,7 @@ function openWidgetWindow(payload) {
   const widgetId = String(payload?.widgetId ?? '')
   const userType = String(payload?.userType ?? 'front-office')
   const portfolio = String(payload?.selectedPortfolio ?? '1')
+  const portfolioName = String(payload?.portfolioName ?? portfolio).trim()
 
   if (!ALLOWED_WIDGETS.has(widgetId)) {
     return { ok: false, error: 'invalid_widget' }
@@ -57,6 +58,7 @@ function openWidgetWindow(payload) {
 
   const existing = widgetWindows.get(widgetId)
   if (existing && !existing.isDestroyed()) {
+    existing.setTitle(`Portfolio: ${portfolioName} - ${WIDGET_TITLE[widgetId] ?? widgetId}`)
     existing.focus()
     return { ok: true, reused: true }
   }
@@ -66,7 +68,7 @@ function openWidgetWindow(payload) {
     height: 460,
     minWidth: 400,
     minHeight: 320,
-    title: `HedgeSPA — ${WIDGET_TITLE[widgetId] ?? widgetId}`,
+    title: `Portfolio: ${portfolioName} - ${WIDGET_TITLE[widgetId] ?? widgetId}`,
     webPreferences: webPreferences(),
   })
 
@@ -98,6 +100,15 @@ app.whenReady().then(() => {
       return openWidgetWindow(payload)
     } catch (err) {
       return { ok: false, error: String(err?.message ?? err) }
+    }
+  })
+
+  ipcMain.on('dashboard-title-update', (_event, payload) => {
+    const portfolioName = String(payload?.portfolioName ?? '').trim()
+    if (!portfolioName) return
+    for (const [widgetId, win] of widgetWindows.entries()) {
+      if (win.isDestroyed()) continue
+      win.setTitle(`Portfolio: ${portfolioName} - ${WIDGET_TITLE[widgetId] ?? widgetId}`)
     }
   })
 
