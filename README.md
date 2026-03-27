@@ -75,7 +75,10 @@ The main process loads `dist/index.html` with `base: './'` so assets resolve und
 ```bash
 npm run lint
 npm run build
+npm run test:run
 ```
+
+Unit tests use [Vitest](https://vitest.dev/) and Testing Library (`npm test` for watch mode).
 
 ## Trial Compliance Matrix (RFP Core)
 
