@@ -8,7 +8,9 @@ declare global {
         widgetId: string
         userType: string
         selectedPortfolio: string
+        portfolioName?: string
       }) => Promise<{ ok: boolean; reused?: boolean; error?: string }>
+      updateWidgetTitles?: (payload: { portfolioName: string }) => void
     }
   }
 }

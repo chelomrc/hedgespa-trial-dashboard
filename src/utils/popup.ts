@@ -2,6 +2,7 @@ type PopupContext = {
   widgetId: string
   userType: string
   selectedPortfolio: string
+  portfolioName?: string
 }
 
 export function buildPopupUrl(context: PopupContext) {
@@ -22,6 +23,7 @@ export type NativeWidgetPayload = {
   widgetId: string
   userType: string
   selectedPortfolio: string
+  portfolioName?: string
 }
 
 export function openTearOutWindow(context: PopupContext) {
@@ -31,6 +33,7 @@ export function openTearOutWindow(context: PopupContext) {
       widgetId: context.widgetId,
       userType: context.userType,
       selectedPortfolio: context.selectedPortfolio,
+      portfolioName: context.portfolioName,
     })
     return
   }
