@@ -1,43 +1,54 @@
 import { BASE_PORTFOLIOS } from './mockData'
 import type { Portfolio } from './types'
 
-function jitter(value: number, scale: number) {
-  return value + (Math.random() - 0.5) * scale
-}
+const POLL_INTERVAL_MS = 5000
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
 }
 
-function nextAllocation(portfolio: Portfolio) {
-  const stocks = clamp(portfolio.allocation.stocks + Math.round((Math.random() - 0.5) * 2), 15, 85)
-  const bonds = clamp(portfolio.allocation.bonds + Math.round((Math.random() - 0.5) * 2), 10, 80)
+function seedFromPortfolioId(portfolioId: string) {
+  return Array.from(portfolioId).reduce((acc, char) => acc + char.charCodeAt(0), 0)
+}
+
+function deterministicWave(seed: number, tick: number, phase = 1) {
+  return Math.sin((tick + seed * 0.17) * 0.45 * phase) * 0.6 + Math.cos((tick + seed) * 0.2 * phase) * 0.4
+}
+
+function nextAllocation(base: Portfolio, tick: number, seed: number) {
+  const stocks = clamp(base.allocation.stocks + Math.round(deterministicWave(seed, tick, 1) * 4), 15, 85)
+  const bonds = clamp(base.allocation.bonds + Math.round(deterministicWave(seed, tick, 1.8) * 3), 10, 80)
   const cash = Math.max(0, 100 - stocks - bonds)
   const normalizedBonds = bonds + (100 - (stocks + bonds + cash))
   return { stocks, bonds: normalizedBonds, cash }
 }
 
 export function simulatePortfolioTick(portfolios: Portfolio[]): Portfolio[] {
+  const tick = Math.floor(Date.now() / POLL_INTERVAL_MS)
   return portfolios.map((portfolio) => {
-    const baseNews = BASE_PORTFOLIOS.find((p) => p.id === portfolio.id)?.news ?? portfolio.news
-    const move = (Math.random() - 0.5) * 9000
-    const percentMove = (move / portfolio.summary.totalValue) * 100
-    const previousPoint =
-      portfolio.summary.performanceData[portfolio.summary.performanceData.length - 1]
-    const nextPoint = jitter(previousPoint, 0.8)
-    const nextSeries = [...portfolio.summary.performanceData.slice(1), nextPoint]
+    const base = BASE_PORTFOLIOS.find((p) => p.id === portfolio.id) ?? portfolio
+    const seed = seedFromPortfolioId(base.id)
+    const valueWave = deterministicWave(seed, tick, 1.15)
+    const valueMove = base.summary.totalValue * valueWave * 0.003
+    const totalValue = Math.max(100000, base.summary.totalValue + valueMove)
+    const todayGainLoss = totalValue - base.summary.totalValue
+    const todayGainLossPercent = (todayGainLoss / base.summary.totalValue) * 100
+    const performanceData = base.summary.performanceData.map((point, idx) => {
+      const drift = deterministicWave(seed + idx, tick, 0.9) * 0.35
+      return Number((point + drift).toFixed(2))
+    })
 
     return {
-      ...portfolio,
+      ...base,
       summary: {
-        ...portfolio.summary,
-        totalValue: Math.max(100000, portfolio.summary.totalValue + move),
-        todayGainLoss: portfolio.summary.todayGainLoss + move,
-        todayGainLossPercent: portfolio.summary.todayGainLossPercent + percentMove,
-        performanceData: nextSeries,
+        ...base.summary,
+        totalValue,
+        todayGainLoss,
+        todayGainLossPercent,
+        performanceData,
       },
-      allocation: nextAllocation(portfolio),
-      news: baseNews,
+      allocation: nextAllocation(base, tick, seed),
+      news: base.news,
     }
   })
 }
