@@ -2,6 +2,12 @@
 
 Bloomberg-style mini dashboard built for the HedgeSPA trial using mock data.
 
+## Live demo
+
+**URL:** [hedgespa-trial-dashboard (Vercel)](https://hedgespa-trial-dashboard-gb3ouoxul-chelomrcs-projects.vercel.app/)
+
+Production build of the SPA in the browser. **Native tear-out** (`BrowserWindow` per widget) runs with Electron locally (`npm run electron:dev` or `npm run electron:preview`), not in the hosted URL.
+
 ## Tech Stack
 
 - React 18 + TypeScript
