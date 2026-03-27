@@ -60,11 +60,13 @@ export function AllocationWidget({ portfolio, isPopup, className }: Props) {
               ]}
               contentStyle={{
                 borderRadius: '8px',
-                border: 'none',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)',
-                backgroundColor: '#0e1d31',
-                color: '#dbe7ff',
+                border: '1px solid var(--ui-tooltip-ring)',
+                boxShadow: 'var(--ui-tooltip-shadow)',
+                backgroundColor: 'var(--ui-tooltip-surface)',
+                color: 'var(--ui-tooltip-value)',
               }}
+              labelStyle={{ color: 'var(--ui-tooltip-label)' }}
+              itemStyle={{ color: 'var(--ui-tooltip-value)' }}
             />
           </PieChart>
         </ResponsiveContainer>

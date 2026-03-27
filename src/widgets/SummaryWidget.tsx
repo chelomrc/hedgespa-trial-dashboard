@@ -37,7 +37,22 @@ export function SummaryWidget({ portfolio }: Props) {
       <div className="summary-chart-card">
         <ResponsiveContainer width="100%" height={140}>
           <AreaChart data={summaryChartData}>
-            <Tooltip />
+            <Tooltip
+              contentStyle={{
+                borderRadius: '8px',
+                border: '1px solid var(--ui-tooltip-ring)',
+                boxShadow: 'var(--ui-tooltip-shadow)',
+                backgroundColor: 'var(--ui-tooltip-surface)',
+                color: 'var(--ui-tooltip-value)',
+              }}
+              labelStyle={{ color: 'var(--ui-tooltip-label)', fontWeight: 600 }}
+              itemStyle={{ color: 'var(--ui-chart-stocks)', fontWeight: 600 }}
+              labelFormatter={(idx) => `Point ${Number(idx) + 1}`}
+              formatter={(value) => [
+                typeof value === 'number' && Number.isFinite(value) ? value.toFixed(2) : '—',
+                'Value',
+              ]}
+            />
             <Area
               type="monotone"
               dataKey="value"

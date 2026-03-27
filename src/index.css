@@ -40,6 +40,12 @@
   --ui-card-bg: #0a1627;
   --ui-card-border: #1f314c;
   --ui-text-strong: #d4e3fb;
+  /* Recharts tooltips: lighter than cards + ring so they don’t blend into the panel */
+  --ui-tooltip-surface: #1a3352;
+  --ui-tooltip-ring: #6eb8e0;
+  --ui-tooltip-label: #c5daf3;
+  --ui-tooltip-value: #f0f7ff;
+  --ui-tooltip-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
 }
 
 * {
