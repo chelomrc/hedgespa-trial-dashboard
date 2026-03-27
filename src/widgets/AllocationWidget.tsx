@@ -54,7 +54,10 @@ export function AllocationWidget({ portfolio, isPopup, className }: Props) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value) => [`${value}%`, 'Weight']}
+              formatter={(value, _name, item) => [
+                `${value}%`,
+                String(item?.payload?.name ?? 'Allocation'),
+              ]}
               contentStyle={{
                 borderRadius: '8px',
                 border: 'none',
@@ -71,7 +74,7 @@ export function AllocationWidget({ portfolio, isPopup, className }: Props) {
           <li key={item.name} className="mb-0 flex min-w-0 items-center gap-2 text-sm font-medium text-[var(--ui-muted-foreground)]">
             <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
             <span className="truncate">{item.name}</span>
-            <span className="ml-auto tabular-nums opacity-85">{item.value}%</span>
+            <span className="tabular-nums opacity-85">{item.value}%</span>
           </li>
         ))}
       </ul>
