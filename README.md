@@ -32,7 +32,7 @@ Bloomberg-style mini dashboard built for the HedgeSPA trial using mock data.
   - News (3–5 headlines per portfolio per RFP; mock: 3 for portfolio 1, 5 for portfolio 2)
   - Allocation (stocks/bonds/cash pie chart)
 - Drag and resize widgets in dashboard mode
-- Tear-out: **native `BrowserWindow`** when running in Electron (IPC `open-widget-window`); falls back to `window.open` in the browser
+- Tear-out: **native `BrowserWindow`** per widget in Electron (IPC `open-widget-window`, `electron/main.cjs`) — this is the trial / client path. If you open the Vite app in a normal browser **without** Electron, the same action uses `window.open` only so you can approximate URLs locally; it is not the desktop delivery mode.
 - Layout and selected portfolio persistence in `localStorage`
 - User type profile switch (`front-office`, `back-office`) with separate saved layouts
 - Live mock updates every 5 seconds
@@ -78,14 +78,15 @@ npm run build
 - News headlines (3–5 per portfolio): **Compliant**
 - Drag and resize in browser: **Compliant**
 - Mock real-time updates every 5-10 seconds: **Compliant** (5s simulation)
-- Tear-out widget windows: **Compliant** (native windows in Electron; browser fallback)
+- Tear-out widget windows: **Compliant** (native `BrowserWindow` in Electron; optional `window.open` only when running the SPA outside Electron for dev smoke tests)
 - Layout persistence (positions, sizes, selected portfolio): **Compliant**
 - Desktop/laptop usability: **Compliant**
 - User-specific persistence simulation: **Compliant** (front/back office profiles)
 
 ## Known Trial Limits
 
-- In plain browser, tear-out still uses `window.open`. In Electron, each widget opens as its own `BrowserWindow` (refocus if the same widget is already open).
+- **Electron (default for trial):** each torn-out widget is a real **`BrowserWindow`**; reopening the same widget refocuses the existing window.
+- **Browser-only dev:** `npm run dev` in Chrome/Firefox has no Electron shell, so tear-out degrades to `window.open` — use `npm run electron:dev` or `electron:preview` to exercise the native behavior.
 - Data source is mocked for trial scope (`clientMock.ts`).
 
 ## Mock data
