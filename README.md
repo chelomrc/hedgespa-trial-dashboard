@@ -4,7 +4,7 @@ Bloomberg-style mini dashboard built for the HedgeSPA trial using mock data.
 
 ## Live demo
 
-**URL:** [hedgespa-trial-dashboard (Vercel)](https://hedgespa-trial-dashboard-gb3ouoxul-chelomrcs-projects.vercel.app/)
+**URL:** [hedgespa-trial-dashboard.vercel.app](https://hedgespa-trial-dashboard.vercel.app/)
 
 Production build of the SPA in the browser. **Native tear-out** (`BrowserWindow` per widget) runs with Electron locally (`npm run electron:dev` or `npm run electron:preview`), not in the hosted URL.
 
@@ -70,6 +70,26 @@ npm run electron:preview
 
 The main process loads `dist/index.html` with `base: './'` so assets resolve under `file://`.
 
+### Packaged desktop app (electron-builder)
+
+After `npm run build`, create a distributable for the **current OS** (installers land in `release/`):
+
+```bash
+npm run electron:dist
+```
+
+- **Windows:** NSIS setup (`.exe`) — run this command on Windows.
+- **macOS:** `.dmg` — run on a Mac (signing/notarization are optional for trial builds).
+- **Linux:** AppImage — run on Linux.
+
+For a quick **unpacked** app folder (no installer) for local smoke tests:
+
+```bash
+npm run electron:pack
+```
+
+The `release/` directory is gitignored.
+
 ## Validation Commands
 
 ```bash
@@ -104,12 +124,3 @@ Unit tests use [Vitest](https://vitest.dev/) and Testing Library (`npm test` for
 
 HedgeSPA-supplied structures live in `src/data/clientMock.ts` (`portfolios`, `portfolioHoldings`, `portfolioNews`, `portfolioPerformance`). The dashboard maps them to widget-ready models via `src/data/mapClientMockToDashboard.ts`. Portfolio IDs in UI are `"1"` and `"2"` (stringified `portfolioId`).
 
-## Suggested 15-Minute Demo Flow
-
-1. Show dashboard and switch between two portfolios.
-2. Explain Summary, News, Allocation widgets.
-3. Drag and resize widgets.
-4. Tear out each widget into separate windows.
-5. Switch user type and show different persisted layout.
-6. Refresh page to demonstrate persistence.
-7. Explain architecture and next-step scale plan.
