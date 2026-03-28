@@ -1,9 +1,10 @@
 {
   "name": "hedgespa-trial-dashboard",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "electron/main.cjs",
+  "author": "HedgeSPA Trial",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -12,7 +13,39 @@
     "test:run": "vitest run",
     "preview": "vite preview",
     "electron:dev": "cross-env NODE_ENV=development concurrently -k \"vite\" \"wait-on http://127.0.0.1:5173 && electron .\"",
-    "electron:preview": "cross-env NODE_ENV=production electron ."
+    "electron:preview": "cross-env NODE_ENV=production electron .",
+    "electron:pack": "npm run build && electron-builder --dir",
+    "electron:dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.hedgespa.trial-dashboard",
+    "productName": "HedgeSPA Trial Dashboard",
+    "copyright": "Copyright © 2026 HedgeSPA Pte. Ltd.",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "forceCodeSigning": false,
+    "win": {
+      "target": ["nsis"],
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.finance"
+    },
+    "linux": {
+      "target": ["AppImage"]
+    }
   },
   "dependencies": {
     "@tanstack/react-query": "^5.91.3",
@@ -37,6 +70,7 @@
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
     "electron": "^34.0.0",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
